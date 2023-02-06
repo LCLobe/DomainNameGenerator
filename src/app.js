@@ -33,39 +33,46 @@ function render() {
   let noumBackSearchPosition = 0;
   let noumShort = "";
   let ouputArray = [];
+  let temporaryString = "";
 
-  for (let i = 0; i <= pronounArray.length - 1; i++) {
-    for (let j = 0; j <= adjArray.length - 1; j++) {
-      for (let k = 0; k <= noumArray.length - 1; k++) {
-        for (let l = 0; l <= domainsArray.length - 1; l++) {
+  for (
+    let pronoumIndex = 0;
+    pronoumIndex < pronounArray.length;
+    pronoumIndex++
+  ) {
+    for (let adjIndex = 0; adjIndex < adjArray.length; adjIndex++) {
+      for (let noumIndex = 0; noumIndex < noumArray.length; noumIndex++) {
+        for (
+          let domainIndex = 0;
+          domainIndex < domainsArray.length;
+          domainIndex++
+        ) {
           //Compare domain with name:
-          domainNameShort = domainsArray[l]
-            .slice(1, domainsArray[l].length - 1)
-            .toLowerCase();
+          domainNameShort = domainsArray[domainIndex].slice(1).toLowerCase();
 
-          if (noumArray[k].length - domainNameShort.length > 0) {
-            noumBackSearchPosition =
-              noumArray[k].length - domainNameShort.length - 1;
-          } else {
-            noumBackSearchPosition = 0;
-          }
-
-          if (
-            noumArray[k]
-              .toLowerCase()
-              .includes(domainNameShort, noumBackSearchPosition)
-          ) {
+          temporaryString = noumArray[noumIndex];
+          if (temporaryString.endsWith(domainNameShort)) {
             //Provide shorter noum:
-            noumShort = noumArray[k].slice(0, noumBackSearchPosition);
+
+            noumShort = noumArray[noumIndex].slice(
+              0,
+              noumArray[noumIndex].length - domainNameShort.length
+            );
 
             domainName =
-              pronounArray[i] + adjArray[j] + noumShort + domainsArray[l];
+              pronounArray[pronoumIndex] +
+              adjArray[adjIndex] +
+              noumShort +
+              domainsArray[domainIndex];
             //console.log(domainName);
             ouputArray.push(domainName);
             continue;
           }
           domainName =
-            pronounArray[i] + adjArray[j] + noumArray[k] + domainsArray[l];
+            pronounArray[pronoumIndex] +
+            adjArray[adjIndex] +
+            noumArray[noumIndex] +
+            domainsArray[domainIndex];
           //console.log(domainName);
           ouputArray.push(domainName);
         }
@@ -79,8 +86,7 @@ function setTextArrayByLinesString(arrayOfDomains) {
   let stringBtLinesHTML = `This are your awesome <strong>${arrayOfDomains.length}</strong> results:`;
 
   for (let i = 0; i <= arrayOfDomains.length - 1; i++) {
-    stringBtLinesHTML += "<br>";
-    stringBtLinesHTML += arrayOfDomains[i];
+    stringBtLinesHTML += `<p>${arrayOfDomains[i]}</p>`;
   }
 
   return stringBtLinesHTML;
